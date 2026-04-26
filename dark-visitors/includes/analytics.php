@@ -6,7 +6,7 @@ function dark_visitors_log_visit() {
     $should_log_visit = dark_visitors_is_analytics_enabled_and_allowed();
     $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
     $request_path = isset($_SERVER['REQUEST_URI']) ? sanitize_url(wp_unslash($_SERVER['REQUEST_URI'])) : "";
-    
+
     if ($should_log_visit && $access_token && !dark_visitors_is_system_request($request_path)) {
         $request_method = isset($_SERVER['REQUEST_METHOD']) ? sanitize_text_field(wp_unslash($_SERVER['REQUEST_METHOD'])) : "";
         $request_headers = dark_visitors_get_request_headers();
@@ -27,94 +27,124 @@ function dark_visitors_log_visit() {
             'created' => gmdate('c')
         );
 
-        dark_visitors_append_to_visits_log($visit);
-        dark_visitors_upload_visits_log_if_needed();
+        if (dark_visitors_get_user_is_wordpress_log_batching_disabled()) {
+            dark_visitors_upload_visit($visit);
+        } else {
+            dark_visitors_cache_visit($visit);
+            dark_visitors_upload_cached_visits_if_needed();
+        }
     }
 }
 
 add_action('shutdown', 'dark_visitors_log_visit');
 
-// Log Files
+// Buffer
 
-function dark_visitors_append_to_visits_log($visit) {
-    try {
-        $file_size = file_exists(DARK_VISITORS_VISITS_LOG_PATH) ? filesize(DARK_VISITORS_VISITS_LOG_PATH) : 0;
+function dark_visitors_cache_visit($visit) {
+    wp_cache_add(DARK_VISITORS_CURRENT_VISIT_INDEX_KEY, 0, DARK_VISITORS_CACHE_GROUP);
+    $index = wp_cache_incr(DARK_VISITORS_CURRENT_VISIT_INDEX_KEY, 1, DARK_VISITORS_CACHE_GROUP);
 
-        if ($file_size >= DARK_VISITORS_VISITS_LOG_SIZE_MAX_IN_BYTES) {
-            return;
-        }
-        
-        $log_line = wp_json_encode($visit) . PHP_EOL;
-        $file_handle = fopen(DARK_VISITORS_VISITS_LOG_PATH, 'a');
-
-        if ($file_handle === false) {
-            return;
-        }
-        
-        if (!flock($file_handle, LOCK_EX | LOCK_NB)) {
-            fclose($file_handle);
-            return;
-        }
-        
-        fwrite($file_handle, $log_line);
-        flock($file_handle, LOCK_UN);
-        fclose($file_handle);
-    } catch (Exception $e) {
-        error_log('Known Agents: Error appending to visit log - ' . $e->getMessage());
+    if ($index === false) {
+        return;
     }
+
+    wp_cache_set(
+        DARK_VISITORS_VISIT_KEY_PREFIX . $index,
+        $visit,
+        DARK_VISITORS_CACHE_GROUP,
+        10 * MINUTE_IN_SECONDS
+    );
 }
 
 // Upload
 
-function dark_visitors_upload_visits_log_if_needed() {
-    $last_visits_log_upload_time = get_option(DARK_VISITORS_LAST_VISITS_LOG_UPLOAD_TIME, 0);
-    $current_time = time();
-    
-    if (($current_time - $last_visits_log_upload_time) > DARK_VISITORS_VISITS_LOG_UPLOAD_INTERVAL_IN_SECONDS) {
-        update_option(DARK_VISITORS_LAST_VISITS_LOG_UPLOAD_TIME, $current_time, false);
-        dark_visitors_upload_visits_log();
+function dark_visitors_upload_cached_visits_if_needed() {
+    $is_lock_acquired = wp_cache_add(
+        DARK_VISITORS_LOG_FLUSH_LOCK_KEY,
+        1,
+        DARK_VISITORS_CACHE_GROUP,
+        DARK_VISITORS_LOG_FLUSH_INTERVAL_IN_SECONDS
+    );
+
+    if (!$is_lock_acquired) {
+        return;
+    }
+
+    dark_visitors_upload_cached_visits();
+}
+
+function dark_visitors_upload_cached_visits() {
+    try {
+        $current_index = (int) wp_cache_get(DARK_VISITORS_CURRENT_VISIT_INDEX_KEY, DARK_VISITORS_CACHE_GROUP);
+        $last_flushed_index = (int) wp_cache_get(DARK_VISITORS_LAST_FLUSHED_VISIT_INDEX_KEY, DARK_VISITORS_CACHE_GROUP);
+
+        if ($current_index <= $last_flushed_index) {
+            return;
+        }
+
+        $start_index = max($last_flushed_index + 1, $current_index - DARK_VISITORS_LOG_FLUSH_MAX_VISITS + 1);
+        $keys = array();
+
+        for ($i = $start_index; $i <= $current_index; $i++) {
+            $keys[] = DARK_VISITORS_VISIT_KEY_PREFIX . $i;
+        }
+
+        $visits = wp_cache_get_multiple($keys, DARK_VISITORS_CACHE_GROUP);
+        $ndjson = '';
+        $keys_to_delete = array();
+
+        foreach ($visits as $key => $visit) {
+            if ($visit !== false) {
+                $ndjson .= wp_json_encode($visit) . PHP_EOL;
+                $keys_to_delete[] = $key;
+            }
+        }
+
+        if (!empty($keys_to_delete)) {
+            wp_cache_delete_multiple($keys_to_delete, DARK_VISITORS_CACHE_GROUP);
+        }
+
+        wp_cache_set(
+            DARK_VISITORS_LAST_FLUSHED_VISIT_INDEX_KEY,
+            $current_index,
+            DARK_VISITORS_CACHE_GROUP
+        );
+
+        dark_visitors_upload_logs($ndjson);
+    } catch (Exception $e) {
+        error_log('Known Agents: Error uploading visits - ' . $e->getMessage());
     }
 }
 
-function dark_visitors_upload_visits_log() {
+function dark_visitors_upload_visit($visit) {
     try {
-        $file_handle = fopen(DARK_VISITORS_VISITS_LOG_PATH, 'r+');
-
-        if ($file_handle === false) {
-            return;
-        }
-
-        if (!flock($file_handle, LOCK_EX | LOCK_NB)) {
-            fclose($file_handle);
-            return;
-        }
-
-        $ndjson_content = stream_get_contents($file_handle);
-
-        ftruncate($file_handle, 0);
-        flock($file_handle, LOCK_UN);
-        fclose($file_handle);
-
-        $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
-
-        if (!empty($ndjson_content) && $access_token) {
-            $compressed_ndjson_content = gzencode($ndjson_content, 6);
-            
-            $headers = array(
-                'Content-Type' => 'text/plain',
-                'Content-Encoding' => 'gzip',
-                'Authorization' => 'Bearer ' . $access_token
-            );
-
-            wp_remote_post('https://api.knownagents.com/logs/wordpress', array(
-                'headers' => $headers,
-                'body' => $compressed_ndjson_content,
-                'blocking' => false
-            ));
-        }
+        $ndjson = wp_json_encode($visit) . PHP_EOL;
+        dark_visitors_upload_logs($ndjson);
     } catch (Exception $e) {
-        error_log('Known Agents: Error uploading visit log - ' . $e->getMessage());
+        error_log('Known Agents: Error uploading visit - ' . $e->getMessage());
     }
+}
+
+function dark_visitors_upload_logs($ndjson) {
+    $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
+
+    if (empty($ndjson) || !$access_token) {
+        return;
+    }
+
+    $compressed_ndjson = gzencode($ndjson, 6);
+
+    $headers = array(
+        'Content-Type' => 'text/plain',
+        'Content-Encoding' => 'gzip',
+        'Authorization' => 'Bearer ' . $access_token
+    );
+
+    wp_remote_post('https://api.knownagents.com/logs/wordpress', array(
+        'headers' => $headers,
+        'body' => $compressed_ndjson,
+        'blocking' => false
+    ));
 }
 
 // Script Tags

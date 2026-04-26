@@ -2,14 +2,10 @@
 
 // General
 
-define('DARK_VISITORS_WORDPRESS_PLUGIN_VERSION', '1.28.0');
+define('DARK_VISITORS_WORDPRESS_PLUGIN_VERSION', '1.29.0');
 define('DARK_VISITORS_LOGO_PATH', plugin_dir_path(DARK_VISITORS_PLUGIN_FILE) . 'assets/logo.svg');
 define('DARK_VISITORS_LOGO_URL', plugin_dir_url(DARK_VISITORS_PLUGIN_FILE) . 'assets/logo.svg');
 define('DARK_VISITORS_BLOCKED_STATUS_CODE', 403);
-
-// File System
-
-define('DARK_VISITORS_FILES_DIRECTORY', wp_upload_dir()['basedir'] . '/dark-visitors');
 
 // Settings Groups
 
@@ -22,6 +18,7 @@ define('DARK_VISITORS_IS_ANALYTICS_ENABLED', 'dark_visitors_is_analytics_enabled
 define('DARK_VISITORS_IS_ENFORCE_ROBOTS_TXT_ENABLED', 'dark_visitors_is_enforce_robots_txt_enabled');
 define('DARK_VISITORS_SETTINGS_LAST_SAVED', 'dark_visitors_settings_last_saved');
 define('DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED', 'dark_visitors_is_block_ai_assistants_enabled');
+define('DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED', 'dark_visitors_is_block_ai_data_providers_enabled');
 define('DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED', 'dark_visitors_is_block_ai_data_scrapers_enabled');
 define('DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED', 'dark_visitors_is_block_ai_search_crawlers_enabled');
 define('DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED', 'dark_visitors_is_block_archivers_enabled');
@@ -41,15 +38,12 @@ define('DARK_VISITORS_USER', 'dark_visitors_user');
 define('DARK_VISITORS_DAILY_CRON_EVENT', 'dark_visitors_daily_cron_event');
 define('DARK_VISITORS_EVERY_FIVE_MINUTES_CRON_EVENT', 'dark_visitors_every_five_minutes_cron_event');
 
-// Analytics Files
+// Analytics Buffer (object cache)
 
-define('DARK_VISITORS_VISITS_LOG_PATH', DARK_VISITORS_FILES_DIRECTORY . '/visits.log');
-
-// Analytics Triggers
-
-define('DARK_VISITORS_VISITS_LOG_SIZE_MAX_IN_BYTES', 16777216);
-define('DARK_VISITORS_VISITS_LOG_UPLOAD_INTERVAL_IN_SECONDS', 30);
-
-// Analytics Options
-
-define('DARK_VISITORS_LAST_VISITS_LOG_UPLOAD_TIME', 'dark_visitors_last_visits_log_upload_time');
+define('DARK_VISITORS_CACHE_GROUP', 'dark_visitors');
+define('DARK_VISITORS_CURRENT_VISIT_INDEX_KEY', 'dark_visitors_current_visit_index');
+define('DARK_VISITORS_LAST_FLUSHED_VISIT_INDEX_KEY', 'dark_visitors_last_flushed_visit_index');
+define('DARK_VISITORS_VISIT_KEY_PREFIX', 'dark_visitors_visit_');
+define('DARK_VISITORS_LOG_FLUSH_LOCK_KEY', 'dark_visitors_log_flush_lock');
+define('DARK_VISITORS_LOG_FLUSH_INTERVAL_IN_SECONDS', 15);
+define('DARK_VISITORS_LOG_FLUSH_MAX_VISITS', 20000);

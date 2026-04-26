@@ -8,6 +8,7 @@ function dark_visitors_register_settings() {
     register_setting(DARK_VISITORS_SETTINGS_GROUP, DARK_VISITORS_IS_ENFORCE_ROBOTS_TXT_ENABLED);
     register_setting(DARK_VISITORS_SETTINGS_GROUP, DARK_VISITORS_SETTINGS_LAST_SAVED);
     register_setting(DARK_VISITORS_SETTINGS_GROUP, DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED);
+    register_setting(DARK_VISITORS_SETTINGS_GROUP, DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED);
     register_setting(DARK_VISITORS_SETTINGS_GROUP, DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED);
     register_setting(DARK_VISITORS_SETTINGS_GROUP, DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED);
     register_setting(DARK_VISITORS_SETTINGS_GROUP, DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED);
@@ -172,7 +173,7 @@ function dark_visitors_page() {
                 <h1>Known Agents</h1>
                 <em>Formerly Dark Visitors</em>
             </div>
-            <p>Get realtime visibility into crawlers, scrapers, and AI agents browsing your website. Measure human traffic coming from AI chat and search LLMs like ChatGPT, Claude, and Gemini. Protect sensitive content from unwanted scraping with a robots.txt that stays up to date with the latest bots automatically.</p>
+            <p>Get realtime visibility into crawlers, scrapers, and AI agents browsing your website. Measure human conversions from AI chat and search platforms like ChatGPT, Claude, and Gemini. Protect your content and reduce server cost by serving a robots.txt that updates continuously.</p>
             <div class="button-container">
                 <a class="button" href="https://knownagents.com/projects" target="_blank">See Your Hidden Bot Traffic ↗</a>
             </div>
@@ -235,6 +236,14 @@ function dark_visitors_page() {
                                 value="1"
                             />
                             <label for="dark_visitors_is_block_ai_assistants_enabled">Block AI Assistants</label><br>
+                            <input
+                                type="checkbox"
+                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED); ?>"
+                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED); ?>"
+                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED, '0') == '1'); ?>
+                                value="1"
+                            />
+                            <label for="dark_visitors_is_block_ai_data_providers_enabled">Block AI Data Providers</label><br>
                             <input
                                 type="checkbox"
                                 id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED); ?>"

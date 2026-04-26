@@ -178,6 +178,22 @@ function dark_visitors_get_user_is_robots_txt_enforcement_disallowed() {
     }
 }
 
+function dark_visitors_get_user_is_wordpress_log_batching_disabled() {
+    $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
+
+    if ($access_token) {
+        $user = dark_visitors_get_user();
+
+        if (isset($user['is_wordpress_log_batching_disabled'])) {
+            return $user['is_wordpress_log_batching_disabled'];
+        } else {
+            return false;
+        }
+    } else {
+        return false;
+    }
+}
+
 function dark_visitors_get_user_analytics_script_tag() {
     $user = dark_visitors_get_user();
     return $user['analytics_script_tag'] ?? "";
@@ -199,6 +215,7 @@ add_action('update_option_' . DARK_VISITORS_SETTINGS_LAST_SAVED, function () {
 
 function dark_visitors_get_agent_types_array() {
     $is_block_ai_assistants_enabled = get_option(DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED, '0') === '1';
+    $is_block_ai_data_providers_enabled = get_option(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED, '0') === '1';
     $is_block_ai_data_scrapers_enabled = get_option(DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED, '0') === '1';
     $is_block_ai_search_crawlers_enabled = get_option(DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED, '0') === '1';
     $is_block_archivers_enabled = get_option(DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED, '0') === '1';
@@ -210,35 +227,39 @@ function dark_visitors_get_agent_types_array() {
     $agent_types = array();
 
     if ($is_block_ai_assistants_enabled) {
-        array_push($agent_types, 'AI Assistant');
+        $agent_types[] = 'AI Assistant';
+    }
+
+    if ($is_block_ai_data_providers_enabled) {
+        $agent_types[] = 'AI Data Provider';
     }
 
     if ($is_block_ai_data_scrapers_enabled) {
-        array_push($agent_types, 'AI Data Scraper');
+        $agent_types[] = 'AI Data Scraper';
     }
 
     if ($is_block_ai_search_crawlers_enabled) {
-        array_push($agent_types, 'AI Search Crawler');
+        $agent_types[] = 'AI Search Crawler';
     }
 
     if ($is_block_archivers_enabled) {
-        array_push($agent_types, 'Archiver');
+        $agent_types[] = 'Archiver';
     }
 
     if ($is_block_intelligence_gatherers_enabled) {
-        array_push($agent_types, 'Intelligence Gatherer');
+        $agent_types[] = 'Intelligence Gatherer';
     }
-    
+
     if ($is_block_scrapers_enabled) {
-        array_push($agent_types, 'Scraper');
+        $agent_types[] = 'Scraper';
     }
 
     if ($is_block_seo_crawlers_enabled) {
-        array_push($agent_types, 'SEO Crawler');
+        $agent_types[] = 'SEO Crawler';
     }
-    
+
     if ($is_block_undocumented_ai_agents_enabled) {
-        array_push($agent_types, 'Undocumented AI Agent');
+        $agent_types[] = 'Undocumented AI Agent';
     }
 
     return $agent_types;

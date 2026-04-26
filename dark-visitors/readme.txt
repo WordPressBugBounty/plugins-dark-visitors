@@ -1,9 +1,9 @@
 === Known Agents – Track AI Bots and Crawlers, Block Scrapers, Analyze LLM Referral Traffic ===
 Contributors: gavindarkvisitors
 Tags: firewall, detect, monitor, training, robots.txt
-Requires at least: 5.0
+Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.28.0
+Stable tag: 1.29.0
 Requires PHP: 7.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -17,7 +17,7 @@ You have [40% more visitors than you think](https://knownagents.com/insights). P
 
 ## 1. Agent Analytics
 
-Get realtime insight into the hidden ecosystem of crawlers, scrapers, and AI agents browsing your website.
+Get realtime visibility into the hidden ecosystem of crawlers, scrapers, and AI agents browsing your website
 
 * **Monitor traffic from crawlers and scrapers**: Track the hidden activity of [all known artificial agents](https://knownagents.com/agents) visiting your website in real time.
 * **Analyze how AI agents browse your website**: Review sessions from AI models autonomously navigating and interacting with your website. Optimize their experience to increase conversions and human referrals.
@@ -28,14 +28,14 @@ Get realtime insight into the hidden ecosystem of crawlers, scrapers, and AI age
 
 ## 2. LLM Referral Tracking
 
-Measure human conversions from AI chat and search platforms like ChatGPT, Perplexity, Gemini, Claude, and more.
+Measure human conversions from AI chat and search platforms like ChatGPT, Perplexity, Gemini, Claude, and more
 
 * **Find out which AI platforms are sending you traffic**: See which LLMs are recommending your website and measure how many humans click through to visit.
 * **Export reports to CSV**: Download LLM referral reports for custom analysis.
 
 ## 3. Automatic Robots.txt
 
-Protect IP, reduce server cost, and save time by serving a robots.txt that updates continuously.
+Protect your content and reduce server cost by serving a robots.txt that updates continuously
 
 * **Block crawlers and scrapers by category**: Control access for entire agent categories including AI crawlers, scrapers, SEO bots, and more. One selection covers every current and future agent in that group.
 * **Stop tracking new bots manually**: Your robots.txt is updated as new agents emerge, so you never have to manage them yourself or make manual edits.
@@ -77,7 +77,7 @@ Known Agents tracks thousands of known AI agents, web crawlers, and scrapers by 
 
 = How are the AI agents and bots categorized? =
 
-Known Agents categorizes agents into distinct types to help you understand and control different kinds of bot traffic. These categories include AI Agents, AI Assistants, AI Data Scrapers, AI Search Crawlers, Archivers, Developer Helpers, Fetchers, Automated Agents, Intelligence Gatherers, Scrapers, SEO Crawlers, Search Engine Crawlers, Security Scanners, and Undocumented AI Agents. Each agent in our directory is classified into one of these categories.
+Known Agents categorizes agents into distinct types to help you understand and control different kinds of bot traffic. These categories include AI Agents, AI Assistants, AI Data Providers, AI Data Scrapers, AI Search Crawlers, Archivers, Developer Helpers, Fetchers, Automated Agents, Intelligence Gatherers, Scrapers, SEO Crawlers, Search Engine Crawlers, Security Scanners, and Undocumented AI Agents. Each agent in our directory is classified into one of these categories.
 
 = Why should I care about bot and AI agent traffic to my website? =
 
@@ -107,6 +107,9 @@ More than you think. On average, [40% or more of website visits](https://knownag
 7. Blocked agents who tried to ignore the robots.txt rules
 
 == Changelog ==
+
+= 1.29.0 =
+* Code updates
 
 = 1.28.0 =
 * Changed name from Dark Visitors to Known Agents
