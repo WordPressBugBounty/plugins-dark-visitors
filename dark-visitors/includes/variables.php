@@ -1,55 +1,5 @@
 <?php
 
-// User Agent Strings List
-
-function dark_visitors_get_user_agent_strings_list() {
-    $cached_user_agent_strings_list = get_transient(DARK_VISITORS_USER_AGENT_STRINGS_LIST);
-
-    if ($cached_user_agent_strings_list === false) {
-        return dark_visitors_refresh_and_return_user_agent_strings_list();
-    } else {
-        return $cached_user_agent_strings_list;
-    }
-}
-
-function dark_visitors_refresh_and_return_user_agent_strings_list() {
-    $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
-
-    if ($access_token) {
-        $headers = array(
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $access_token
-        );
-
-        $body = array(
-            'agent_types' => dark_visitors_get_agent_types_array(),
-            'wordpress_plugin_version' => DARK_VISITORS_WORDPRESS_PLUGIN_VERSION
-        );
-
-        $response = wp_remote_post('https://api.knownagents.com/user-agent-strings-lists', array(
-            'headers' => $headers,
-            'body' => wp_json_encode($body),
-            'blocking' => true
-        ));
-
-        if (dark_visitors_is_network_response_code_successful($response)) {
-            $user_agent_strings_list = json_decode(wp_remote_retrieve_body($response), true);
-
-            set_transient(DARK_VISITORS_USER_AGENT_STRINGS_LIST, $user_agent_strings_list, DAY_IN_SECONDS);
-
-            return $user_agent_strings_list;
-        } else {
-            $user_agent_strings_list = array();
-
-            set_transient(DARK_VISITORS_USER_AGENT_STRINGS_LIST, $user_agent_strings_list, DAY_IN_SECONDS);
-
-            return $user_agent_strings_list;
-        }
-    } else {
-        return array();
-    }
-}
-
 // Robots.txt
 
 function dark_visitors_get_robots_txt() {
@@ -65,40 +15,68 @@ function dark_visitors_get_robots_txt() {
 function dark_visitors_refresh_and_return_robots_txt() {
     $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
 
-    if ($access_token) {
-        $headers = array(
+    if (!$access_token) {
+        return '';
+    }
+
+    $response = wp_remote_post('https://api.knownagents.com/robots-txts', array(
+        'headers' => array(
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . $access_token
-        );
-
-        $body = array(
+        ),
+        'body' => wp_json_encode(array(
             'disallow' => '/',
             'agent_types' => dark_visitors_get_agent_types_array(),
             'wordpress_plugin_version' => DARK_VISITORS_WORDPRESS_PLUGIN_VERSION
-        );
+        ))
+    ));
 
-        $response = wp_remote_post('https://api.knownagents.com/robots-txts', array(
-            'headers' => $headers,
-            'body' => wp_json_encode($body),
-            'blocking' => true
-        ));
+    $robots_txt = dark_visitors_is_network_response_code_successful($response)
+        ? wp_remote_retrieve_body($response)
+        : '';
 
-        if (dark_visitors_is_network_response_code_successful($response)) {
-            $robots_txt = wp_remote_retrieve_body($response);
+    set_transient(DARK_VISITORS_ROBOTS_TXT, $robots_txt, DAY_IN_SECONDS);
 
-            set_transient(DARK_VISITORS_ROBOTS_TXT, $robots_txt, DAY_IN_SECONDS);
+    return $robots_txt;
+}
 
-            return $robots_txt;
-        } else {
-            $robots_txt = '';
+// User Agent Strings List
 
-            set_transient(DARK_VISITORS_ROBOTS_TXT, $robots_txt, DAY_IN_SECONDS);
+function dark_visitors_get_user_agent_strings_list() {
+    $cached_user_agent_strings_list = get_transient(DARK_VISITORS_USER_AGENT_STRINGS_LIST);
 
-            return $robots_txt;
-        }
+    if ($cached_user_agent_strings_list === false) {
+        return dark_visitors_refresh_and_return_user_agent_strings_list();
     } else {
-        return '';
+        return $cached_user_agent_strings_list;
     }
+}
+
+function dark_visitors_refresh_and_return_user_agent_strings_list() {
+    $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
+
+    if (!$access_token) {
+        return array();
+    }
+
+    $response = wp_remote_post('https://api.knownagents.com/user-agent-strings-lists', array(
+        'headers' => array(
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $access_token
+        ),
+        'body' => wp_json_encode(array(
+            'agent_types' => dark_visitors_get_agent_types_array(),
+            'wordpress_plugin_version' => DARK_VISITORS_WORDPRESS_PLUGIN_VERSION
+        ))
+    ));
+
+    $user_agent_strings_list = dark_visitors_is_network_response_code_successful($response)
+        ? json_decode(wp_remote_retrieve_body($response), true)
+        : array();
+
+    set_transient(DARK_VISITORS_USER_AGENT_STRINGS_LIST, $user_agent_strings_list, DAY_IN_SECONDS);
+
+    return $user_agent_strings_list;
 }
 
 // User
@@ -116,82 +94,52 @@ function dark_visitors_get_user() {
 function dark_visitors_refresh_and_return_user() {
     $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
 
-    if ($access_token) {
-        $headers = array(
-            'Authorization' => 'Bearer ' . $access_token
-        );
-
-        $response = wp_remote_get('https://api.knownagents.com/user', array(
-            'headers' => $headers,
-            'blocking' => true
-        ));
-
-        if (dark_visitors_is_network_response_code_successful($response)) {
-            $user = json_decode(wp_remote_retrieve_body($response), true);
-
-            set_transient(DARK_VISITORS_USER, $user, MINUTE_IN_SECONDS);
-
-            return $user;
-        } else {
-            $user = array();
-
-            set_transient(DARK_VISITORS_USER, $user, MINUTE_IN_SECONDS);
-
-            return $user;
-        }
-    } else {
+    if (!$access_token) {
         return array();
     }
+
+    $response = wp_remote_get('https://api.knownagents.com/user', array(
+        'headers' => array(
+            'Authorization' => 'Bearer ' . $access_token
+        )
+    ));
+
+    $user = dark_visitors_is_network_response_code_successful($response)
+        ? json_decode(wp_remote_retrieve_body($response), true)
+        : array();
+
+    set_transient(DARK_VISITORS_USER, $user, DAY_IN_SECONDS);
+
+    return $user;
 }
 
 // User Helpers
 
 function dark_visitors_get_user_is_analytics_disallowed() {
-    $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
-
-    if ($access_token) {
-        $user = dark_visitors_get_user();
-
-        if (isset($user['is_analytics_allowed'])) {
-            return !$user['is_analytics_allowed'];
-        } else {
-            return false;
-        }
-    } else {
+    if (!get_option(DARK_VISITORS_ACCESS_TOKEN)) {
         return true;
     }
+
+    $user = dark_visitors_get_user();
+    return isset($user['is_analytics_allowed']) ? !$user['is_analytics_allowed'] : false;
 }
 
 function dark_visitors_get_user_is_robots_txt_enforcement_disallowed() {
-    $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
-
-    if ($access_token) {
-        $user = dark_visitors_get_user();
-
-        if (isset($user['is_robots_txt_enforcement_allowed'])) {
-            return !$user['is_robots_txt_enforcement_allowed'];
-        } else {
-            return false;
-        }
-    } else {
+    if (!get_option(DARK_VISITORS_ACCESS_TOKEN)) {
         return true;
     }
+
+    $user = dark_visitors_get_user();
+    return isset($user['is_robots_txt_enforcement_allowed']) ? !$user['is_robots_txt_enforcement_allowed'] : false;
 }
 
 function dark_visitors_get_user_is_wordpress_log_batching_disabled() {
-    $access_token = get_option(DARK_VISITORS_ACCESS_TOKEN);
-
-    if ($access_token) {
-        $user = dark_visitors_get_user();
-
-        if (isset($user['is_wordpress_log_batching_disabled'])) {
-            return $user['is_wordpress_log_batching_disabled'];
-        } else {
-            return false;
-        }
-    } else {
+    if (!get_option(DARK_VISITORS_ACCESS_TOKEN)) {
         return false;
     }
+
+    $user = dark_visitors_get_user();
+    return $user['is_wordpress_log_batching_disabled'] ?? false;
 }
 
 function dark_visitors_get_user_analytics_script_tag() {
@@ -202,14 +150,20 @@ function dark_visitors_get_user_analytics_script_tag() {
 // Caching
 
 function dark_visitors_clear_caches() {
-    delete_transient(DARK_VISITORS_USER_AGENT_STRINGS_LIST);
     delete_transient(DARK_VISITORS_ROBOTS_TXT);
+    delete_transient(DARK_VISITORS_USER_AGENT_STRINGS_LIST);
     delete_transient(DARK_VISITORS_USER);
 }
 
 add_action('update_option_' . DARK_VISITORS_SETTINGS_LAST_SAVED, function () {
     add_action('shutdown', 'dark_visitors_clear_caches');
 });
+
+// Cron Jobs
+
+add_action(DARK_VISITORS_HOURLY_CRON_EVENT, 'dark_visitors_refresh_and_return_robots_txt');
+add_action(DARK_VISITORS_HOURLY_CRON_EVENT, 'dark_visitors_refresh_and_return_user_agent_strings_list');
+add_action(DARK_VISITORS_HOURLY_CRON_EVENT, 'dark_visitors_refresh_and_return_user');
 
 // Helpers
 

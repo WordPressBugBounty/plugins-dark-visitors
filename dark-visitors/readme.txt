@@ -1,9 +1,9 @@
 === Known Agents – Track AI Bots and Crawlers, Block Scrapers, Analyze LLM Referral Traffic ===
 Contributors: gavindarkvisitors
-Tags: firewall, detect, monitor, training, robots.txt
+Tags: analytics, robots.txt, geo, aeo, visibility
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.29.0
+Stable tag: 1.30.0
 Requires PHP: 7.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -13,33 +13,34 @@ Track crawlers, scrapers, LLM assistants, and AI agents on your website. Generat
 
 ## Track, control, and optimize your website for AI agents and bots
 
-You have [40% more visitors than you think](https://knownagents.com/insights). Protect your content from unwanted AI scraping and crawling, and turn the rising wave of AI agents, LLM assistants, and other bots crawling your website into a new growth channel for your business. For full details, visit the [Known Agents](https://knownagents.com/) website.
+You have [40% more visitors than you think](https://knownagents.com/insights). Protect your content from unwanted AI scraping, and turn the rising wave of AI agents, LLM assistants, and other bots visiting your website into a new growth channel for your business. For full details, visit the [Known Agents](https://knownagents.com/) website.
 
-## 1. Agent Analytics
+## 1. AI Agent & Bot Analytics
 
 Get realtime visibility into the hidden ecosystem of crawlers, scrapers, and AI agents browsing your website
 
-* **Monitor traffic from crawlers and scrapers**: Track the hidden activity of [all known artificial agents](https://knownagents.com/agents) visiting your website in real time.
-* **Analyze how AI agents browse your website**: Review sessions from AI models autonomously navigating and interacting with your website. Optimize their experience to increase conversions and human referrals.
-* **Detect bots spoofing legitimate agents**: Identify bad actors and unauthorized scrapers pretending to be legitimate agents like Googlebot or Bingbot.
-* **Get alerted to bot traffic spikes**: Stay informed when an agent's traffic starts surging or overloading your server.
-* **See which agents visit most frequently and which pages they target**: Break down bot traffic by agent and URL to understand where crawlers and scrapers are focused.
+* **Watch traffic from crawlers and scrapers as it happens**: Track the hidden activity of [all known artificial agents](https://knownagents.com/agents) visiting your website in real time.
+* **Replay AI agent navigation patterns**: Follow a single agent's session as it navigates your website. Find where agents get stuck, identify dead ends, and help them complete their tasks.
+* **Catch bots spoofing legitimate agents**: Identify bad actors and unauthorized scrapers pretending to be legitimate agents like Googlebot or Bingbot.
+* **Never miss a bot traffic spike**: Stay informed when an agent's traffic starts surging or overloading your server.
+* **Reveal which agents visit most, and which pages they target**: Break down bot traffic by page to understand what they're interested in.
 * **Export reports to CSV**: Download agent activity reports for custom analysis.
 
-## 2. LLM Referral Tracking
+## 2. LLM Citation & Referral Tracking (GEO, AEO)
 
-Measure human conversions from AI chat and search platforms like ChatGPT, Perplexity, Gemini, Claude, and more
+Measure citations and human click-throughs from AI chat platforms like ChatGPT, Claude, and Gemini
 
-* **Find out which AI platforms are sending you traffic**: See which LLMs are recommending your website and measure how many humans click through to visit.
+* **Increase citations in AI chat responses**: See which pages LLMs recommend most often. Double down on content that's working.
+* **Find out which AI platforms are sending you traffic**: Measure how many humans are clicking through to your website from a citation.
 * **Export reports to CSV**: Download LLM referral reports for custom analysis.
 
-## 3. Automatic Robots.txt
+## 3. Automatic Robots.txt & Bad Bot Detection
 
 Protect your content and reduce server cost by serving a robots.txt that updates continuously
 
-* **Block crawlers and scrapers by category**: Control access for entire agent categories including AI crawlers, scrapers, SEO bots, and more. One selection covers every current and future agent in that group.
-* **Stop tracking new bots manually**: Your robots.txt is updated as new agents emerge, so you never have to manage them yourself or make manual edits.
-* **Enforce robots.txt rules with the WordPress plugin**: The WordPress plugin detects and blocks bots that ignore your robots.txt rules, protecting your content from unauthorized access.
+* **Set robots.txt rules for entire categories of bots**: Control access for entire agent categories including AI crawlers, scrapers, SEO bots, and more. One selection covers every current and future agent in that group.
+* **We track new bots, you don't have to**: Your robots.txt is updated as new agents emerge, so you never have to manage them yourself or make manual edits.
+* **Block misbehaving crawlers and scrapers**: Detect and block bots that ignore your robots.txt rules using the WordPress plugin, or our automation detectors.
 
 ## Demos
 
@@ -51,7 +52,7 @@ This plugin connects your website to [Known Agents](https://knownagents.com/). I
 
 By signing up, you agree to the [Terms of Service](https://knownagents.com/terms-of-service) and [Privacy Policy](https://knownagents.com/privacy-policy).
 
-Are you finding this plugin useful? Please [leave us a ★★★★★ review](https://wordpress.org/support/plugin/dark-visitors/reviews/#new-post)! Otherwise, please [ask us for help](https://wordpress.org/support/plugin/dark-visitors/).
+Are you finding this plugin useful? Please [leave us a ★★★★★ review](https://wordpress.org/support/plugin/dark-visitors/reviews/#new-post)! Questions or issues? [Ask us for help](https://wordpress.org/support/plugin/dark-visitors/).
 
 == Installation ==
 
@@ -63,13 +64,40 @@ Your website is now connected to Known Agents.
 
 == Frequently Asked Questions ==
 
-= Do I need a Known Agents account to use this plugin? =
+= How much of my website traffic comes from bots and AI agents? =
 
-Yes. Creating an account is free and only takes a few seconds. This is where you'll be able to see dashboards and insights into agent activity on your website.
+More than you think. On average, [40% or more of website visits](https://knownagents.com/insights) come from AI agents and bots, a volume that is completely invisible to traditional analytics tools like Google Analytics. This has been observed consistently across websites of all sizes and industries.
+
+= Why should I care about bot and AI agent traffic to my website? =
+
+AI agent traffic has a direct and growing impact on your business. It determines the following:
+
+* Whether bad actors and unauthorized scrapers are stealing your content
+* Whether your content is included in AI model training datasets
+* How accurately AI assistants like ChatGPT and Claude summarize and recommend your content to users
+* How many humans are clicking through to your website from AI citations
+* Whether AI shopping agents can successfully complete purchases on your site
+* How your pages rank in traditional and AI-powered search engine results
+* How much server bandwidth and cost bot traffic consumes
+* Which AI agents have accessed your content, for licensing and negotiation purposes
+
+With AI adoption accelerating, bot traffic is becoming one of the most important segments to understand and optimize for.
 
 = Is Known Agents free? =
 
 Known Agents is a freemium service. The free tier gives you immediate visibility into your hidden bot traffic with no credit card required. You can upgrade to unlock higher event volumes, additional projects for multiple websites, CSV export, API access, and priority support. Full details are on the [pricing](https://knownagents.com/pricing) page.
+
+= Do I need a Known Agents account to use this plugin? =
+
+Yes. Creating an account is free and only takes a few seconds. This is where you'll be able to see dashboards and insights into agent activity on your website.
+
+= How do I block AI bots like GPTBot and ClaudeBot from my WordPress website? =
+
+Known Agents makes it easy. Once the plugin is installed and connected, go to the plugin settings and check the categories of bots you want to block, such as AI Data Scrapers, AI Assistants, or AI Search Crawlers. Known Agents will automatically generate and maintain robots.txt rules covering every agent in those categories, including GPTBot (OpenAI), ClaudeBot (Anthropic), PerplexityBot, Bytespider (TikTok), and many more. The rules update automatically as new bots are discovered, so you never have to manage them manually.
+
+= What is GEO (Generative Engine Optimization) and AEO (Answer Engine Optimization)? =
+
+GEO and AEO refer to the practice of optimizing your website to appear in AI-generated responses, such as answers from ChatGPT, Claude, Gemini, and Perplexity, rather than traditional search engine results pages. Known Agents supports GEO and AEO by showing you which pages AI platforms are citing most often and measuring how many humans click through to your website from those citations. This lets you double down on content that's already working and identify gaps where AI platforms aren't recommending you.
 
 = Which AI agents and bots does Known Agents track? =
 
@@ -79,34 +107,27 @@ Known Agents tracks thousands of known AI agents, web crawlers, and scrapers by 
 
 Known Agents categorizes agents into distinct types to help you understand and control different kinds of bot traffic. These categories include AI Agents, AI Assistants, AI Data Providers, AI Data Scrapers, AI Search Crawlers, Archivers, Developer Helpers, Fetchers, Automated Agents, Intelligence Gatherers, Scrapers, SEO Crawlers, Search Engine Crawlers, Security Scanners, and Undocumented AI Agents. Each agent in our directory is classified into one of these categories.
 
-= Why should I care about bot and AI agent traffic to my website? =
+= Is Known Agents compatible with RSL and other content monetization platforms? =
 
-AI agent traffic has a direct and growing impact on your business. It determines the following:
-
-* Whether your content is included in AI model training datasets
-* Whether AI shopping agents can successfully complete purchases on your site
-* How accurately AI assistants like ChatGPT and Claude summarize and recommend your content to users
-* How your pages rank in traditional and AI-powered search engine results
-* How much server bandwidth and cost bot traffic consumes
-* Whether bad actors and unauthorized scrapers are stealing your content
-
-With AI adoption accelerating, bot traffic is becoming one of the most important segments to understand and optimize for.
-
-= How much of my website traffic comes from bots and AI agents? =
-
-More than you think. On average, [40% or more of website visits](https://knownagents.com/insights) come from AI agents and bots, a volume that is completely invisible to traditional analytics tools like Google Analytics. This has been observed consistently across websites of all sizes and industries.
+Yes. Known Agents can work as a useful complement to content monetization platforms and standards like RSL. It gives you visibility into which agents are accessing your content and whether they're complying with your licensing terms.
 
 == Screenshots ==
 
-1. Insights into crawler and scraper activity
-2. Insights into AI agent activity
-3. A realtime timeline of all agent visits to the website
-4. Insights into human referrals from AI chat and search LLMs
-5. An automatically generated robots.txt
-6. An analysis of robots.txt rules
-7. Blocked agents who tried to ignore the robots.txt rules
+1. See your hidden bot and AI agent traffic - Half your website's traffic isn't human anymore. Get the "Google Analytics for bots" and use it to grow
+2. Track the activity of individual bots - Discover the pages each agent is most interested in, and how often it visits
+3. Measure human referrals from LLMs - Analyze clicks from AI platforms like ChatGPT, Claude, and Gemini
+4. Increase citations in LLM responses - Double down on content that AI platforms are recommending
+5. Find out where AI agents get stuck - Review common entry points, exit pages, and dead ends
+6. Replay AI agent navigation patterns - Follow a single agent’s session as it performs a task on your website
+7. Detect bad bots scraping your content - Catch unidentified, spoofed, and disallowed visits, set robots.txt rules by category
+8. Reveal which pages are visited the most - Sort your pages by agent visits or human LLM referrals
+9. Inspect and optimize any page on your website - Understand exactly how AI is engaging with your content, page by page
+10. Watch everything happen in real time - Monitor every agent visit and human LLM referral in a live feed
 
 == Changelog ==
+
+= 1.30.0 =
+* Code updates
 
 = 1.29.0 =
 * Code updates

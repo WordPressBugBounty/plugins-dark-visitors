@@ -2,7 +2,7 @@
 
 // General
 
-define('DARK_VISITORS_WORDPRESS_PLUGIN_VERSION', '1.29.0');
+define('DARK_VISITORS_WORDPRESS_PLUGIN_VERSION', '1.30.0');
 define('DARK_VISITORS_LOGO_PATH', plugin_dir_path(DARK_VISITORS_PLUGIN_FILE) . 'assets/logo.svg');
 define('DARK_VISITORS_LOGO_URL', plugin_dir_url(DARK_VISITORS_PLUGIN_FILE) . 'assets/logo.svg');
 define('DARK_VISITORS_BLOCKED_STATUS_CODE', 403);
@@ -36,7 +36,7 @@ define('DARK_VISITORS_USER', 'dark_visitors_user');
 // Cron Job Events
 
 define('DARK_VISITORS_DAILY_CRON_EVENT', 'dark_visitors_daily_cron_event');
-define('DARK_VISITORS_EVERY_FIVE_MINUTES_CRON_EVENT', 'dark_visitors_every_five_minutes_cron_event');
+define('DARK_VISITORS_HOURLY_CRON_EVENT', 'dark_visitors_hourly_cron_event');
 
 // Analytics Buffer (object cache)
 

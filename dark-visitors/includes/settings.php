@@ -53,7 +53,7 @@ function dark_visitors_page() {
         }
 
         .container {
-            max-width: 40rem;
+            max-width: 50rem;
             margin-left: auto;
             margin-right: auto;
         }
@@ -79,12 +79,8 @@ function dark_visitors_page() {
             text-align: center;
         }
         
-        h1 {
+        h1, h2 {
             font-weight: bold !important;
-        }
-
-        h2 {
-            font-weight: bold;
         }
 
         hr {
@@ -160,10 +156,53 @@ function dark_visitors_page() {
             margin-bottom: 1rem;
         }
 
-        .premium-feature label {
-            vertical-align: revert;
+        td label {
             font-weight: bold;
         }
+
+        .premium-feature label {
+            vertical-align: revert;
+        }
+
+        .category-td {
+            padding: 0;
+        }
+
+        .category-td > p {
+            margin: 0;
+            padding-top: 1rem;
+            padding-right: 1rem;
+            padding-bottom: 0;
+            padding-left: 1rem;
+        }
+
+        .category-td > .premium-feature {
+            padding: 1rem;
+            margin: 1rem;
+        }
+
+        .category-table {
+            border: none;
+        }
+
+        .category-table td {
+            border: none;
+            padding-top: 1rem;
+            padding-right: 0;
+            padding-bottom: 0;
+            padding-left: 1rem;
+            vertical-align: top;
+            width: 50%;
+        }
+
+        .category-table td:last-child {
+            padding-right: 1rem;
+        }
+
+        .category-table p {
+            margin-top: 0.25rem;
+        }
+
     </style>
     <div class="wrap">
         <h1 class="fake-header"></h1>
@@ -171,11 +210,10 @@ function dark_visitors_page() {
             <div class="header-container">
                 <img src="<?php echo esc_url(DARK_VISITORS_LOGO_URL); ?>">
                 <h1>Known Agents</h1>
-                <em>Formerly Dark Visitors</em>
             </div>
             <p>Get realtime visibility into crawlers, scrapers, and AI agents browsing your website. Measure human conversions from AI chat and search platforms like ChatGPT, Claude, and Gemini. Protect your content and reduce server cost by serving a robots.txt that updates continuously.</p>
             <div class="button-container">
-                <a class="button" href="https://knownagents.com/projects" target="_blank">See Your Hidden Bot Traffic ↗</a>
+                <a class="button" href="https://knownagents.com/projects" target="_blank">Open Your Dashboard ↗</a>
             </div>
             <h2>Configuration</h2>
             <form method="post" action="options.php" class="dark-visitors-form">
@@ -187,7 +225,7 @@ function dark_visitors_page() {
                             <div class="table-header-step-text-label">Get Started</div>
                         </th>
                         <td>
-                            <p>In 30 seconds, <a href="https://knownagents.com/sign-up" target="_blank">sign up for free</a> and <a href="https://knownagents.com/projects" target="_blank">create a new project</a>. This gives you access to your website's dashboard.</p>
+                            <p>To see your dashboard, <a href="https://knownagents.com/sign-up" target="_blank">sign up</a> and <a href="https://knownagents.com/projects" target="_blank">create a new project</a>. This is free and takes less than 30 seconds.</p>
                         </td>
                     </tr>
                     <tr>
@@ -218,8 +256,8 @@ function dark_visitors_page() {
                                 <?php checked(get_option(DARK_VISITORS_IS_ANALYTICS_ENABLED, '1') == '1'); ?>
                                 value="1"
                             />
-                            <label for="dark_visitors_is_analytics_enabled">Enable Agent & LLM Analytics</label><br>
-                            <p>Track the activity of <a href="https://knownagents.com/agents" target="_blank">all known agents</a> crawling your website, and human referrals coming from AI chat and search LLMs like ChatGPT, Claude, and Gemini. Insights can be seen on your <a href="https://knownagents.com/projects" target="_blank">dashboard</a>. You can test this by following the instructions in the <a href="https://knownagents.com/docs/analytics" target="_blank">docs</a>.</p>
+                            <label for="dark_visitors_is_analytics_enabled">Enable Agent & LLM Analytics</label>
+                            <p>Track the activity of every AI agent and bot crawling your website, plus citations and human referrals from AI platforms like ChatGPT, Claude, and Gemini. You can test this by following the steps in the <a href="https://knownagents.com/docs/analytics/wordpress" target="_blank">docs</a>. Realtime activity can be seen on <a href="https://knownagents.com/projects" target="_blank">your dashboard</a>.</p>
                         </td>
                     </tr>
                     <tr>
@@ -227,80 +265,120 @@ function dark_visitors_page() {
                             <div class="table-header-step-number-label">Step 4:</div>
                             <div class="table-header-step-text-label">Set Up Automatic Robots.txt</div>
                         </th>
-                        <td>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_ai_assistants_enabled">Block AI Assistants</label><br>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_ai_data_providers_enabled">Block AI Data Providers</label><br>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_ai_data_scrapers_enabled">Block AI Data Scrapers</label><br>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_ai_search_crawlers_enabled">Block AI Search Crawlers</label><br>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_archivers_enabled">Block Archivers</label><br>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_INTELLIGENCE_GATHERERS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_INTELLIGENCE_GATHERERS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_INTELLIGENCE_GATHERERS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_intelligence_gatherers_enabled">Block Intelligence Gatherers</label><br>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_SCRAPERS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_SCRAPERS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_SCRAPERS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_scrapers_enabled">Block Scrapers</label><br>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_SEO_CRAWLERS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_SEO_CRAWLERS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_SEO_CRAWLERS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_seo_crawlers_enabled">Block SEO Crawlers</label><br>
-                            <input
-                                type="checkbox"
-                                id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_UNDOCUMENTED_AI_AGENTS_ENABLED); ?>"
-                                name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_UNDOCUMENTED_AI_AGENTS_ENABLED); ?>"
-                                <?php checked(get_option(DARK_VISITORS_IS_BLOCK_UNDOCUMENTED_AI_AGENTS_ENABLED, '0') == '1'); ?>
-                                value="1"
-                            />
-                            <label for="dark_visitors_is_block_undocumented_ai_agents_enabled">Block Undocumented AI Agents</label><br>
-                            <p>Protect IP, reduce server cost, and save time by not needing to make manual edits for individual agents. Checking each box will add robots.txt rules to disallow <a href="https://knownagents.com/agents" target="_blank">every agent in that category</a>, updating automatically as new agents are discovered. For more detail, read the <a href="https://knownagents.com/docs/robots-txt" target="_blank">docs</a>.</p>
+                        <td class="category-td">
+                            <p>Protect your content and reduce server cost. Checking each box will add robots.txt rules that disallow every agent in that category, and automatically update them as new agents are discovered. Visit the <a href="https://knownagents.com/agents" target="_blank">Agents Database</a> to learn more about the categories and tradeoffs.</p>
+                            <table class="category-table">
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_DATA_SCRAPERS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_ai_data_scrapers_enabled">Block AI Data Scrapers</label> <a href="https://knownagents.com/agents?agent_type_url_slug=ai-data-scraper" target="_blank">↗</a>
+                                        <p class="category-description">Downloads website content to include in datasets used for training AI models such as LLMs</p>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_DATA_PROVIDERS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_ai_data_providers_enabled">Block AI Data Providers</label> <a href="https://knownagents.com/agents?agent_type_url_slug=ai-data-provider" target="_blank">↗</a>
+                                        <p class="category-description">Crawls websites to supply structured content to AI systems as a third-party service</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_ASSISTANTS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_ai_assistants_enabled">Block AI Assistants</label> <a href="https://knownagents.com/agents?agent_type_url_slug=ai-assistant" target="_blank">↗</a>
+                                        <p class="category-description">Fetches website content in response to a user prompt, to include in an AI-generated answer</p>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_AI_SEARCH_CRAWLERS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_ai_search_crawlers_enabled">Block AI Search Crawlers</label> <a href="https://knownagents.com/agents?agent_type_url_slug=ai-search-crawler" target="_blank">↗</a>
+                                        <p class="category-description">Indexes website content to possibly include as citations in AI-powered search results</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_UNDOCUMENTED_AI_AGENTS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_UNDOCUMENTED_AI_AGENTS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_UNDOCUMENTED_AI_AGENTS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_undocumented_ai_agents_enabled">Block Undocumented AI Agents</label> <a href="https://knownagents.com/agents?agent_type_url_slug=undocumented-ai-agent" target="_blank">↗</a>
+                                        <p class="category-description">Crawls websites without disclosing its purpose, collecting data for an unknown AI use case</p>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_SCRAPERS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_SCRAPERS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_SCRAPERS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_scrapers_enabled">Block Scrapers</label> <a href="https://knownagents.com/agents?agent_type_url_slug=scraper" target="_blank">↗</a>
+                                        <p class="category-description">Extracts large amounts of web data, often without explicit website permission</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_SEO_CRAWLERS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_SEO_CRAWLERS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_SEO_CRAWLERS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_seo_crawlers_enabled">Block SEO Crawlers</label> <a href="https://knownagents.com/agents?agent_type_url_slug=seo-crawler" target="_blank">↗</a>
+                                        <p class="category-description">Analyzes website structure and content to identify SEO improvement opportunities</p>
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_ARCHIVERS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_archivers_enabled">Block Archivers</label> <a href="https://knownagents.com/agents?agent_type_url_slug=archiver" target="_blank">↗</a>
+                                        <p class="category-description">Captures and stores historical website snapshots for long-term digital preservation</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            id="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_INTELLIGENCE_GATHERERS_ENABLED); ?>"
+                                            name="<?php echo esc_attr(DARK_VISITORS_IS_BLOCK_INTELLIGENCE_GATHERERS_ENABLED); ?>"
+                                            <?php checked(get_option(DARK_VISITORS_IS_BLOCK_INTELLIGENCE_GATHERERS_ENABLED, '0') == '1'); ?>
+                                            value="1"
+                                        />
+                                        <label for="dark_visitors_is_block_intelligence_gatherers_enabled">Block Intelligence Gatherers</label> <a href="https://knownagents.com/agents?agent_type_url_slug=intelligence-gatherer" target="_blank">↗</a>
+                                        <p class="category-description">Analyzes web content for brand safety, competitive insights, and ad targeting</p>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
                             <div class="premium-feature">
                                 <div class="title">Premium Feature</div>
                                 <?php if ($is_robots_txt_enforcement_disallowed) { ?>
@@ -314,8 +392,8 @@ function dark_visitors_page() {
                                     <?php disabled($is_robots_txt_enforcement_disallowed); ?>
                                     value="1"
                                 />
-                                <label for="dark_visitors_is_enforce_robots_txt_enabled">Forcefully Block Misbehaving Bots</label><br>
-                                <p>Agents that violate your robots.txt rules will receive an HTTP 403 Forbidden response, completely blocking access to your website's content. You'll be able to see these blocked visits on your <a href="https://knownagents.com/projects" target="_blank">dashboard</a>. Make sure any caching you're doing respects the standard Cache-Control HTTP header.</p>
+                                <label for="dark_visitors_is_enforce_robots_txt_enabled">Forcefully Block Misbehaving Bots</label>
+                                <p>Agents that ignore your robots.txt rules will receive an HTTP 403 Forbidden response, blocking access to your website's content. Make sure any caching you're doing respects the standard Cache-Control HTTP header.</p>
                             </div>
                         </td>
                     </tr>
@@ -325,7 +403,7 @@ function dark_visitors_page() {
                             <div class="table-header-step-text-label">Review Your Dashboard</div>
                         </th>
                         <td>
-                            <p><a href="https://knownagents.com/projects" target="_blank">Open your dashboard</a> to see AI agents and bots visiting your website.</p>
+                            <p><a href="https://knownagents.com/projects" target="_blank">Open your dashboard</a> to see AI agents and bots visiting your website in real time.</p>
                         </td>
                     </tr>
                 </table>
