@@ -4,7 +4,7 @@
 Plugin Name: Known Agents
 Plugin URI: https://knownagents.com/
 Description: Track crawlers, scrapers, LLM assistants, and AI agents on your website. Generate a robots.txt that blocks AI bots. Formerly Dark Visitors.
-Version: 1.30.0
+Version: 1.31.0
 Requires at least: 6.0
 Requires PHP: 7.0
 Author: Known Agents

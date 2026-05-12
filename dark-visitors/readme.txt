@@ -3,7 +3,7 @@ Contributors: gavindarkvisitors
 Tags: analytics, robots.txt, geo, aeo, visibility
 Requires at least: 6.0
 Tested up to: 6.9
-Stable tag: 1.30.0
+Stable tag: 1.31.0
 Requires PHP: 7.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
@@ -125,6 +125,9 @@ Yes. Known Agents can work as a useful complement to content monetization platfo
 10. Watch everything happen in real time - Monitor every agent visit and human LLM referral in a live feed
 
 == Changelog ==
+
+= 1.31.0 =
+* Code updates
 
 = 1.30.0 =
 * Code updates

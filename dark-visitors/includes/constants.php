@@ -2,7 +2,7 @@
 
 // General
 
-define('DARK_VISITORS_WORDPRESS_PLUGIN_VERSION', '1.30.0');
+define('DARK_VISITORS_WORDPRESS_PLUGIN_VERSION', '1.31.0');
 define('DARK_VISITORS_LOGO_PATH', plugin_dir_path(DARK_VISITORS_PLUGIN_FILE) . 'assets/logo.svg');
 define('DARK_VISITORS_LOGO_URL', plugin_dir_url(DARK_VISITORS_PLUGIN_FILE) . 'assets/logo.svg');
 define('DARK_VISITORS_BLOCKED_STATUS_CODE', 403);
@@ -38,12 +38,21 @@ define('DARK_VISITORS_USER', 'dark_visitors_user');
 define('DARK_VISITORS_DAILY_CRON_EVENT', 'dark_visitors_daily_cron_event');
 define('DARK_VISITORS_HOURLY_CRON_EVENT', 'dark_visitors_hourly_cron_event');
 
-// Analytics Buffer (object cache)
+// Analytics Visits
+
+define('DARK_VISITORS_LOG_FLUSH_INTERVAL_IN_SECONDS', 15);
+
+// Analytics Cache Visits
 
 define('DARK_VISITORS_CACHE_GROUP', 'dark_visitors');
-define('DARK_VISITORS_CURRENT_VISIT_INDEX_KEY', 'dark_visitors_current_visit_index');
-define('DARK_VISITORS_LAST_FLUSHED_VISIT_INDEX_KEY', 'dark_visitors_last_flushed_visit_index');
-define('DARK_VISITORS_VISIT_KEY_PREFIX', 'dark_visitors_visit_');
-define('DARK_VISITORS_LOG_FLUSH_LOCK_KEY', 'dark_visitors_log_flush_lock');
-define('DARK_VISITORS_LOG_FLUSH_INTERVAL_IN_SECONDS', 15);
-define('DARK_VISITORS_LOG_FLUSH_MAX_VISITS', 20000);
+define('DARK_VISITORS_CACHE_CURRENT_VISIT_INDEX_KEY', 'dark_visitors_current_visit_index');
+define('DARK_VISITORS_CACHE_LAST_FLUSHED_VISIT_INDEX_KEY', 'dark_visitors_last_flushed_visit_index');
+define('DARK_VISITORS_CACHE_VISIT_KEY_PREFIX', 'dark_visitors_visit_');
+define('DARK_VISITORS_CACHE_LOG_FLUSH_LOCK_KEY', 'dark_visitors_log_flush_lock');
+define('DARK_VISITORS_CACHE_LOG_FLUSH_MAX_VISITS', 20000);
+
+// Analytics File Visits
+
+define('DARK_VISITORS_FILE_VISITS_LOG_PATH', trailingslashit(get_temp_dir()) . 'dark-visitors-visits-' . md5(ABSPATH . '|' . get_current_blog_id()) . '.ndjson');
+define('DARK_VISITORS_FILE_VISITS_LOG_SIZE_MAX_IN_BYTES', 8 * MB_IN_BYTES);
+define('DARK_VISITORS_FILE_LAST_FLUSHED_TIME', 'dark_visitors_last_flushed_time');
