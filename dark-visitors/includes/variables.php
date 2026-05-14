@@ -133,13 +133,13 @@ function dark_visitors_get_user_is_robots_txt_enforcement_disallowed() {
     return isset($user['is_robots_txt_enforcement_allowed']) ? !$user['is_robots_txt_enforcement_allowed'] : false;
 }
 
-function dark_visitors_get_user_is_wordpress_log_batching_disabled() {
+function dark_visitors_get_user_wordpress_log_batching_method() {
     if (!get_option(DARK_VISITORS_ACCESS_TOKEN)) {
-        return false;
+        return null;
     }
 
     $user = dark_visitors_get_user();
-    return $user['is_wordpress_log_batching_disabled'] ?? false;
+    return $user['wordpress_log_batching_method'] ?? null;
 }
 
 function dark_visitors_get_user_analytics_script_tag() {

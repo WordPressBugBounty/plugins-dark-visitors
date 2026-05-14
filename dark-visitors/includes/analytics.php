@@ -15,6 +15,10 @@ function dark_visitors_log_visit() {
         $is_blocked = $response_status_code === DARK_VISITORS_BLOCKED_STATUS_CODE;
         $response_duration_in_milliseconds = round((microtime(true) - WP_START_TIMESTAMP) * 1000);
 
+        $is_vip = defined('VIP_GO_APP_ID');
+        $has_cache = wp_using_ext_object_cache();
+        $log_batching_method = dark_visitors_get_user_wordpress_log_batching_method();
+
         $visit = array(
             'request_path' => $request_path,
             'request_method' => $request_method,
@@ -23,13 +27,22 @@ function dark_visitors_log_visit() {
             'response_status_code' => $response_status_code,
             'response_headers' => $response_headers,
             'response_duration_in_milliseconds' => $response_duration_in_milliseconds,
+            'created' => gmdate('c'),
             'wordpress_plugin_version' => DARK_VISITORS_WORDPRESS_PLUGIN_VERSION,
-            'created' => gmdate('c')
+            'wordpress_is_vip' => $is_vip,
+            'wordpress_has_cache' => $has_cache,
+            'wordpress_log_batching_method' => $log_batching_method,
         );
 
-        if (dark_visitors_get_user_is_wordpress_log_batching_disabled()) {
+        if ($log_batching_method === 'cache') {
+            dark_visitors_add_cache_visit($visit);
+            dark_visitors_upload_cache_visits_if_needed();
+        } else if ($log_batching_method === 'file') {
+            dark_visitors_add_file_visit($visit);
+            dark_visitors_upload_file_visits_if_needed();
+        } else if ($log_batching_method === 'none') {
             dark_visitors_upload_visit($visit);
-        } else if (wp_using_ext_object_cache()) {
+        } else if ($is_vip && $has_cache) {
             dark_visitors_add_cache_visit($visit);
             dark_visitors_upload_cache_visits_if_needed();
         } else {
@@ -56,7 +69,12 @@ function dark_visitors_upload_visit($visit) {
 
 function dark_visitors_add_cache_visit($visit) {
     try {
-        wp_cache_add(DARK_VISITORS_CACHE_CURRENT_VISIT_INDEX_KEY, 0, DARK_VISITORS_CACHE_GROUP);
+        $is_current_index_initialized_to_zero = wp_cache_add(DARK_VISITORS_CACHE_CURRENT_VISIT_INDEX_KEY, 0, DARK_VISITORS_CACHE_GROUP);
+
+        if ($is_current_index_initialized_to_zero) {
+            wp_cache_delete(DARK_VISITORS_CACHE_LAST_FLUSHED_VISIT_INDEX_KEY, DARK_VISITORS_CACHE_GROUP);
+        }
+
         $index = wp_cache_incr(DARK_VISITORS_CACHE_CURRENT_VISIT_INDEX_KEY, 1, DARK_VISITORS_CACHE_GROUP);
 
         if ($index === false) {
@@ -68,7 +86,7 @@ function dark_visitors_add_cache_visit($visit) {
             DARK_VISITORS_CACHE_VISIT_KEY_PREFIX . $index,
             $visit,
             DARK_VISITORS_CACHE_GROUP,
-            10 * MINUTE_IN_SECONDS
+            DARK_VISITORS_CACHE_VISIT_TTL_IN_SECONDS
         );
 
         if (!$is_visit_cached) {
@@ -146,9 +164,10 @@ function dark_visitors_upload_cache_visits() {
 
 function dark_visitors_add_file_visit($visit) {
     try {
-        $file_size = @file_exists(DARK_VISITORS_FILE_VISITS_LOG_PATH) ? @filesize(DARK_VISITORS_FILE_VISITS_LOG_PATH) : 0;
+        $file_size = @filesize(DARK_VISITORS_FILE_VISITS_LOG_PATH) ?: 0;
 
         if ($file_size >= DARK_VISITORS_FILE_VISITS_LOG_SIZE_MAX_IN_BYTES) {
+            dark_visitors_upload_visit($visit);
             return;
         }
 
@@ -162,23 +181,31 @@ function dark_visitors_add_file_visit($visit) {
 
         if (!@flock($file_handle, LOCK_EX | LOCK_NB)) {
             fclose($file_handle);
+            dark_visitors_upload_visit($visit);
             return;
         }
 
-        @fwrite($file_handle, $log_line);
+        $bytes_written = @fwrite($file_handle, $log_line);
         @flock($file_handle, LOCK_UN);
         fclose($file_handle);
+
+        if ($bytes_written === false) {
+            dark_visitors_upload_visit($visit);
+        }
     } catch (Throwable $e) {
         error_log('Known Agents: Error appending file visit - ' . $e->getMessage());
+        dark_visitors_upload_visit($visit);
     }
 }
 
 function dark_visitors_upload_file_visits_if_needed() {
-    $last_visits_log_upload_time = get_option(DARK_VISITORS_FILE_LAST_FLUSHED_TIME, 0);
+    clearstatcache(true, DARK_VISITORS_FILE_LAST_FLUSH_PATH);
+
+    $last_visits_log_upload_time = @filemtime(DARK_VISITORS_FILE_LAST_FLUSH_PATH) ?: 0;
     $current_time = time();
 
     if (($current_time - $last_visits_log_upload_time) > DARK_VISITORS_LOG_FLUSH_INTERVAL_IN_SECONDS) {
-        update_option(DARK_VISITORS_FILE_LAST_FLUSHED_TIME, $current_time, false);
+        @touch(DARK_VISITORS_FILE_LAST_FLUSH_PATH, $current_time);
         dark_visitors_upload_file_visits();
     }
 }
@@ -312,7 +339,7 @@ function dark_visitors_get_request_headers() {
             $request_headers[$header_name] = $header_value;
         }
     }
-    
+
     return $request_headers;
 }
 

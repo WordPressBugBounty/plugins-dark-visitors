@@ -2,7 +2,7 @@
 
 // General
 
-define('DARK_VISITORS_WORDPRESS_PLUGIN_VERSION', '1.31.0');
+define('DARK_VISITORS_WORDPRESS_PLUGIN_VERSION', '1.32.0');
 define('DARK_VISITORS_LOGO_PATH', plugin_dir_path(DARK_VISITORS_PLUGIN_FILE) . 'assets/logo.svg');
 define('DARK_VISITORS_LOGO_URL', plugin_dir_url(DARK_VISITORS_PLUGIN_FILE) . 'assets/logo.svg');
 define('DARK_VISITORS_BLOCKED_STATUS_CODE', 403);
@@ -49,10 +49,11 @@ define('DARK_VISITORS_CACHE_CURRENT_VISIT_INDEX_KEY', 'dark_visitors_current_vis
 define('DARK_VISITORS_CACHE_LAST_FLUSHED_VISIT_INDEX_KEY', 'dark_visitors_last_flushed_visit_index');
 define('DARK_VISITORS_CACHE_VISIT_KEY_PREFIX', 'dark_visitors_visit_');
 define('DARK_VISITORS_CACHE_LOG_FLUSH_LOCK_KEY', 'dark_visitors_log_flush_lock');
-define('DARK_VISITORS_CACHE_LOG_FLUSH_MAX_VISITS', 20000);
+define('DARK_VISITORS_CACHE_VISIT_TTL_IN_SECONDS', MINUTE_IN_SECONDS);
+define('DARK_VISITORS_CACHE_LOG_FLUSH_MAX_VISITS', 10000);
 
 // Analytics File Visits
 
 define('DARK_VISITORS_FILE_VISITS_LOG_PATH', trailingslashit(get_temp_dir()) . 'dark-visitors-visits-' . md5(ABSPATH . '|' . get_current_blog_id()) . '.ndjson');
+define('DARK_VISITORS_FILE_LAST_FLUSH_PATH', trailingslashit(get_temp_dir()) . 'dark-visitors-visits-' . md5(ABSPATH . '|' . get_current_blog_id()) . '.flush');
 define('DARK_VISITORS_FILE_VISITS_LOG_SIZE_MAX_IN_BYTES', 8 * MB_IN_BYTES);
-define('DARK_VISITORS_FILE_LAST_FLUSHED_TIME', 'dark_visitors_last_flushed_time');
